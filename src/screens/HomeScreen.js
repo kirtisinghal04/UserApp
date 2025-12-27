@@ -1,17 +1,18 @@
 
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
-    FlatList,
-    StyleSheet,
-    Text,
-    View,
-    SafeAreaView,
-    RefreshControl
+  FlatList,
+  ImageBackground,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View
 } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import UserCard from '../components/UserCard';
-import { fetchAllUsers } from '../services/api';
 import { useFavorites } from '../context/FavoritesContext';
+import { fetchAllUsers } from '../services/api';
 
 const HomeScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
@@ -21,6 +22,11 @@ const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   
   const { favorites, toggleFavorite, isFavorite, loading: loadingFavorites } = useFavorites();
+
+  // Background image from Unsplash API
+  const backgroundImage = { 
+    uri: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1200&auto=format&fit=crop' 
+  };
 
   const loadUsers = useCallback(async () => {
     console.log('Loading users...');
@@ -129,59 +135,75 @@ const HomeScreen = ({ navigation }) => {
   const loading = loadingUsers || loadingFavorites;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.mainTitle}>User Favorites App</Text>
-        <Text style={styles.subTitle}>Preview of the UI layout</Text>
-      </View>
-      
-      <View style={styles.content}>
-        <SearchBar 
-          value={searchQuery}
-          onChangeText={handleSearch}
-          placeholder="Search by name..."
-        />
-        
-        <FlatList
-          data={filteredUsers}
-          renderItem={renderUserItem}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={['#667eea']}
+    <ImageBackground 
+      source={backgroundImage} 
+      style={styles.background}
+      blurRadius={2}
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.overlay}>
+          <View style={styles.header}>
+            <Text style={styles.mainTitle}>User Favorites App</Text>
+            <Text style={styles.subTitle}>Preview of the UI layout</Text>
+          </View>
+          
+          <View style={styles.content}>
+            <SearchBar 
+              value={searchQuery}
+              onChangeText={handleSearch}
+              placeholder="Search by name..."
             />
-          }
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>
-              {loading ? 'Loading users...' : 'No users found'}
-            </Text>
-          }
-        />
-      </View>
-    </SafeAreaView>
+            
+            <FlatList
+              data={filteredUsers}
+              renderItem={renderUserItem}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.listContainer}
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={['#232b50ff']}
+                  tintColor="#232b50ff"
+                />
+              }
+              ListEmptyComponent={
+                <Text style={styles.emptyText}>
+                  {loading ? 'Loading users...' : 'No users found'}
+                </Text>
+              }
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   header: {
-    backgroundColor: '#667eea',
+    backgroundColor: 'rgba(34, 46, 97, 0.9)',
     paddingVertical: 25,
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 8,
   },
   mainTitle: {
     fontSize: 28,
@@ -189,11 +211,17 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     marginBottom: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   subTitle: {
     fontSize: 16,
-    color: 'rgba(255,255,255,0.9)',
+    color: 'rgba(255, 255, 255, 0.95)',
     textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
   content: {
     flex: 1,
@@ -204,11 +232,14 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   emptyText: {
-    color: '#666',
+    color: 'white',
     textAlign: 'center',
     fontSize: 18,
     marginTop: 50,
     fontStyle: 'italic',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
 });
 

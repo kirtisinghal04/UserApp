@@ -1,16 +1,16 @@
 
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
-    FlatList,
-    StyleSheet,
-    Text,
-    View,
-    SafeAreaView,
-    RefreshControl
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View
 } from 'react-native';
 import UserCard from '../components/UserCard';
-import { fetchAllUsers } from '../services/api';
 import { useFavorites } from '../context/FavoritesContext';
+import { fetchAllUsers } from '../services/api';
 
 const FavoritesScreen = ({ navigation }) => {
   const [favoriteUsers, setFavoriteUsers] = useState([]);
@@ -112,7 +112,7 @@ const FavoritesScreen = ({ navigation }) => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={['#667eea']}
+              colors={['#232b50ff']}
             />
           }
           ListEmptyComponent={
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    backgroundColor: '#667eea',
+    backgroundColor: '#232b50ff',
     paddingVertical: 25,
     paddingHorizontal: 20,
     borderBottomLeftRadius: 20,
