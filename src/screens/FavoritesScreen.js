@@ -92,7 +92,8 @@ const FavoritesScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.mainTitle}>User Favorites App</Text>
+        <Text style={styles.mainTitle}>Mobile App Feature Specification
+</Text>
         <Text style={styles.subTitle}>Preview of the UI layout</Text>
       </View>
       
